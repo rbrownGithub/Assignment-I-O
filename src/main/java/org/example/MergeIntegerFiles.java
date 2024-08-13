@@ -4,22 +4,20 @@ import java.util.*;
 
 public class MergeIntegerFiles {
     public static void main(String[] args) {
-        // Assuming files are in the root directory of the project
+        // File names
         String file1 = "input1.txt";
         String file2 = "input2.txt";
         String mergedFile = "merged.txt";
         String commonFile = "common.txt";
 
+        // Read integers from input files
         List<Integer> integersFromFile1 = readIntegersFromFile(file1);
         List<Integer> integersFromFile2 = readIntegersFromFile(file2);
 
-        if (integersFromFile1 == null || integersFromFile2 == null) {
-            System.out.println("Error reading input files.");
-            return;
-        }
-
+        // Merge files and write to mergedFile
         mergeFiles(integersFromFile1, integersFromFile2, mergedFile);
 
+        // Find common integers and write to commonFile
         List<Integer> commonIntegers = findCommonIntegers(integersFromFile1, integersFromFile2);
         writeIntegersToFile(commonIntegers, commonFile);
 
