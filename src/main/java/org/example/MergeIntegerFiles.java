@@ -1,17 +1,80 @@
 package org.example;
+import java.io.*;
+import java.util.*;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
+public class MergeIntegerFiles {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        // Assuming files are in the root directory of the project
+        String file1 = "input1.txt";
+        String file2 = "input2.txt";
+        String mergedFile = "merged.txt";
+        String commonFile = "common.txt";
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        List<Integer> integersFromFile1 = readIntegersFromFile(file1);
+        List<Integer> integersFromFile2 = readIntegersFromFile(file2);
+
+        if (integersFromFile1 == null || integersFromFile2 == null) {
+            System.out.println("Error reading input files.");
+            return;
+        }
+
+        mergeFiles(integersFromFile1, integersFromFile2, mergedFile);
+
+        List<Integer> commonIntegers = findCommonIntegers(integersFromFile1, integersFromFile2);
+        writeIntegersToFile(commonIntegers, commonFile);
+
+        System.out.println("Processing completed.");
+    }
+
+    private static List<Integer> readIntegersFromFile(String filename) {
+        List<Integer> integers = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                try {
+                    integers.add(Integer.parseInt(line.trim()));
+                } catch (NumberFormatException e) {
+                    System.out.println("Skipping invalid integer in file " + filename + ": " + line);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + filename);
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + filename);
+        }
+        return integers;
+    }
+
+    private static void mergeFiles(List<Integer> list1, List<Integer> list2, String outputFilename) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilename))) {
+            for (Integer number : list1) {
+                writer.write(number.toString());
+                writer.newLine();
+            }
+            for (Integer number : list2) {
+                writer.write(number.toString());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + outputFilename);
+        }
+    }
+
+    private static List<Integer> findCommonIntegers(List<Integer> list1, List<Integer> list2) {
+        Set<Integer> set1 = new HashSet<>(list1);
+        Set<Integer> set2 = new HashSet<>(list2);
+        set1.retainAll(set2);
+        return new ArrayList<>(set1);
+    }
+
+    private static void writeIntegersToFile(List<Integer> integers, String outputFilename) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilename))) {
+            for (Integer number : integers) {
+                writer.write(number.toString());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + outputFilename);
         }
     }
 }

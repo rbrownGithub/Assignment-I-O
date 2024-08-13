@@ -3,6 +3,16 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Compiled class files
+*.class
+
+# Output files
+merged.txt
+common.txt
+
+# Operating system files
+Thumbs.db
+
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
